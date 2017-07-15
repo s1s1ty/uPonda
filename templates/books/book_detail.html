@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block container %}
+<hr></hr>
+<div class="row">
+<!-- <div class="book_read"> -->
+    <div class="col-sm-4">
+    <nav>
+        <div class="chapter_name">
+        <h1><i>{{ book.name }}</i></h1>
+        <ul>
+            {% for chap in book.bookdetails_set.all %}
+            <li>
+                <a href="#"><h4>{{ forloop.counter }} . {{ chap.chapter_name }} {% if request.user ==  book.author %} <a href="/book/update_detail/{{ chap.pk }}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}</h4></a>
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+        </nav>
+    </div>
+    <div class="col-sm-8">
+        <div class="chapter_detail">
+        {% for chap_det in book.bookdetails_set.all %}
+        <h1>{{ chap_det.chapter_name }}</h1>
+         <p class="content-markdown">{{ chap_det.chapter_details }} </p>
+            {% endfor %}
+
+         </div>
+    </div>
+
+</div>
+{% endblock %}
+{% block footer %}
+{% endblock %}

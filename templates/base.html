@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{% block title%} uPonda {%endblock%}</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script
+  src="http://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.5/marked.min.js"></script>
+
+  <script type="text/javascript">
+  $(document).ready(function(){
+    $(".content-markdown").each(function(){
+      var content = $(this).text();
+      console.log(content);
+      var markedContent = marked(content);
+      console.log(markedContent);
+      $(this).html(markedContent);
+    });
+
+    $(".content-markdown img").each(function(){
+      $(this).addclass(img-responsive);
+    });
+  });
+</script>
+
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="{% url 'index' %}">uPonda</a>
+    </div>
+    <div class="collapse navbar-collapse right" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+        <li><a href="{% url 'booklist' %}"><span class="glyphicon glyphicon-book"></span> Read</a></li>
+        {% if request.user.is_authenticated %}
+        <li><a href="{% url 'my_booklist' %}">My Book</a></li>
+        {% endif %}
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+
+        {% if request.user.is_authenticated %}
+        <li><a href="{% url 'chapter_write' %}"><span class="glyphicon glyphicon-pencil"></span> Add Chapter</a></li>
+        <li><a href="{% url 'bookname' %}"><span class="glyphicon glyphicon-plus"></span> Write New Book</a></li>
+        <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-off"></span> Logout</a></li>
+        {% else %}
+        <li><a href="{% url 'login' %}"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+        <li><a href="{% url 'join' %}"><span class="glyphicon glyphicon-registration-mark"></span> Join Free</a></li>
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% block container %}
+{% endblock %}
+
+
+{% block footer %}
+<footer class="container-fluid text-center">
+  <p>Online Book Store Copyright</p>  
+  
+</footer>
+{% endblock %}
+</body>
+</html>

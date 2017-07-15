@@ -1,0 +1,38 @@
+{% extends 'base.html'%}
+
+{% block container %}
+<div class="jumbotron text-center">
+  <form method="GET">
+  <div class="col-sm-3"></div>
+    <div class="input-group col-sm-6">
+      <input type="text" class="form-control" placeholder="Search Book by Book_name/Tag/Author" name='q' value="{{ request.GET.q }}">
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-danger">Search</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="container">
+
+	<div class="row">
+	{% for book in object_list %}
+	  <div class="col-xs-6 col-md-2">
+        <div class="thumbnail">
+            {% if book.cover_pic %}
+                <img src='{{ book.cover_pic.url }}' class="content-markdown"/>
+            {% endif %}
+          <div class="caption">
+          <span class="badge">{{book.tag}}</span><br>
+            __<br>
+            <a href="/book/read/{{ book.id }}"><strong>{{ book.name }}</strong></a>{% if request.user ==  book.author %} <a href="/book/update/{{ book.pk }}"><span class="glyphicon glyphicon-edit"></span></a>{% endif %}
+            <br>
+            
+            <span> {{ book.author }}</span>
+            </div>
+	     </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
