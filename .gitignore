@@ -1,0 +1,5 @@
+*.pyc
+db.*
+001_*.py
+000*.py
+.DS_Store

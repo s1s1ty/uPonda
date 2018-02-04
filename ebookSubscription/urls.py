@@ -1,4 +1,4 @@
-"""uPonda URL Configuration
+"""ebookSubscription URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -18,13 +18,10 @@ from django.conf.urls.static import static
 from django.conf.urls import url, include
 from django.contrib import admin
 
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include('allauth.urls')),
     url(r'^', include('core.urls')),
-    url(r'^book/', include('books.urls')),
-    
+    url(r'^', include('account.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

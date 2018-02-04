@@ -1,13 +1,12 @@
-from django.conf.urls import url, include
-from django.contrib.auth import views as auth_views
+from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
 
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    
-    # user authentication urls
-    url(r'^join/$', views.UserJoinView.as_view(), name='join'),
-    url(r'^login/$', views.UserLoginView.as_view(), name='login'),
-    url(r'^logout/$', auth_views.LogoutView.as_view(), name='logout'),
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    url(r'^my-books/$', views.MyBookView.as_view(), name='my_books'),
+    url(r'^my-book/add/$', views.CreateBookView.as_view(), name='add_book'),
+    url(r'^book/detail/(?P<pk>\d+)/$', login_required(views.BookDetailView.as_view()), name='detail_book'),
+    url(r'^book/detail/(?P<pk>\d+)/subscribe/$', views.BookSubscribeToggle.as_view(), name='subscribe'),
 ]

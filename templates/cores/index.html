@@ -1,0 +1,54 @@
+{% extends 'base.html'%}
+
+{% block container %}
+<div class="jumbotron text-center">
+  <form method="GET">
+  <div class="col-sm-3"></div>
+    <div class="input-group col-sm-6">
+      <input type="text" class="form-control" placeholder="Search Book by Book_name" name='q' value="{{ request.GET.q }}">
+      <div class="input-group-btn">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="container">
+
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.tags == 'error'%}
+          <div class="alert alert-danger">
+            <strong>{{ message }}</strong>
+          </div>
+        {% else %}
+          <div class="alert alert-success">
+            <strong>{{ message }}</strong>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+	<div class="row">
+	{% for book in object_list %}
+	  <div class="col-xs-6 col-md-2">
+        <div class="thumbnail">
+            {% if book.cover_photo %}
+                <img src='{{ book.cover_photo.url }}' class="content-markdown"/>
+            {% endif %}
+
+          <div class="caption">
+            <a href="/book/detail/{{ book.id }}"><strong>{{ book.title }}</strong></a>
+            <br>
+            
+            <span> {{ book.user }}</span><br>
+            {% if book in request.user.profile.subscribe_books.all %} 
+                <a href="{{ MEDIA_URL }}{{book.pdf.url}}" target="_blank"><span class="badge">read</span></a>
+            {% endif %}
+          </div>
+	     </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}

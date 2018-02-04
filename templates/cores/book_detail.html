@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+<hr>
+<div class="container" style="border-top: 5px red;">
+	<div class="row">
+		<div class="col-sm-1"></div>
+		 <div class="col-sm-10">
+
+			 	{% if messages %}
+    			{% for message in messages %}
+					{% if message.tags == 'error'%}
+						<div class="alert alert-danger">
+							<strong>{{ message }}</strong>
+						</div>
+					{% else %}
+						<div class="alert alert-success">
+							<strong>{{ message }}</strong>
+						</div>
+					{% endif %}
+    			{% endfor %}
+				{% endif %}
+
+		
+				<div class="col-sm-4">
+				{% if object.cover_photo %}
+					<img src="{{ object.cover_photo.url }}" height="200px" width="200px"><br>
+					<button class="btn btn-warning" style="width: 70%";><strong>Author : {{ object.user.username }}</strong></button>
+					<button class="btn btn-default" style="width: 70%";><strong>{{ object.subscribers.count }} subscribers</strong></button>
+
+				{% endif %}
+
+				</div>
+				<div class="col-sm-8">
+					<h2>Book Name: {{ object.title }}</h2>
+					<hr>
+					<h4>Book Description: {{ object.description }}</h4>
+					<h4>ISBN No: {{ object.ISBN_No }}</h4>
+
+					{% if object.user == request.user %}
+						<h4>Pdf: <a href="{{ MEDIA_URL }}{{object.pdf.url}}" target="_blank">PDF File</a></h4>
+					{% else %}
+
+						{% if object in request.user.profile.subscribe_books.all %}
+							<h4>Pdf: <a href="{{ MEDIA_URL }}{{object.pdf.url}}" target="_blank">PDF File</a></h4>
+							<a href="{{ object.get_subscribe_url }}"><button type="submit" class="btn btn-success pull-left" name='subscribe'>Unsubscribe</button></a>
+
+						{% else %}
+							<span style="color: red;">*Please subscribe to see the pdf file</span>
+							<a href="{{ object.get_subscribe_url }}"><button type="submit" class="btn btn-danger pull-left" name='subscribe'>Subscribe</button></a>
+						{% endif %}
+						
+					{% endif %}
+					<br>
+					<h2><u>Reviews</u></h2>
+					{% if object in request.user.profile.subscribe_books.all %}
+						<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+							<div class="star-rating">
+								<input type="radio" name="rating" id="rating" value="1">Good
+								<input type="radio" name="rating" id="rating" value="2">Average	
+								<input type="radio" name="rating" id="rating" value="3">Bad
+							</div><br>
+							{{ form.as_p }}
+							<input type="submit" class="btn btn-success pull-right" value="Add"><br>
+						</form>
+					{% endif %}
+					{% for comment in comments %}
+						<blockquote class="blockquote">
+							<p>{{ comment.content }}</p>
+							<small>Rate: {{ comment.rating_text }}</small>
+							<small>via {{ comment.user }} , {{ comment.timestamp|time }}</small>
+						</blockquote>
+						<hr/>
+					{% endfor %}
+					<div>
+
+					</div>
+
+				</div>
+		
+
+		 </div>
+	</div>
+</div>
+{% endblock %}
